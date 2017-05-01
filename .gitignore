@@ -3,5 +3,10 @@
 # Compiled output
 *.pyc
 
+# migrations files
+*/migrations/*
+
 # DB dump
 db.sqlite3
+
+
