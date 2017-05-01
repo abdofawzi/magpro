@@ -4,7 +4,7 @@ from Project import models
 
 class AppInline(admin.TabularInline):
 	model = models.App
-	fields = ('fk_project','name')
+	fields = ('project','name')
 	extra = 0
 
 
