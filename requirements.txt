@@ -1,0 +1,4 @@
+# provides a database and form field to accept and store colors in the RGB 
+# https://github.com/charettes/django-colorful
+pip install django-colorful
+
