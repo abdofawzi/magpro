@@ -4,4 +4,5 @@ from Setting import models
 
 admin.site.register(models.Label)
 admin.site.register(models.Status)
+admin.site.register(models.Type)
 

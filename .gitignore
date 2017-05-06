@@ -1,12 +1,13 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Compiled output
+# Ignore compiled output
 *.pyc
 
-# migrations files
+# Ignore migrations files
 */migrations/*
 
-# DB dump
+# Ignore DB dump
 db.sqlite3
 
-
+# Ignore uploaded file
+attachments/

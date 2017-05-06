@@ -29,3 +29,21 @@ class Status(models.Model):
 	class Meta:
 		verbose_name = _('Status')
 		verbose_name_plural = _('Statuses')
+
+class Type(models.Model):
+	name = models.CharField(max_length=100, verbose_name=_('Status Name'))
+	created_at = models.DateTimeField(auto_now_add=True)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	def __unicode__(self):
+		return unicode(self.name)
+
+	class Meta:
+		verbose_name = _('Type')
+		verbose_name_plural = _('Types')
+
+
+
+
+
+

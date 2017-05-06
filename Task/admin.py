@@ -18,30 +18,29 @@ class TaskAdmin(admin.ModelAdmin):
 
 	fieldsets = (
 		(None, {
-			'fields': (('app',),)
+			'fields': (('app','closed'),)
 		}),
 		(_(''), {
-			'fields': (('title','closed'),('status',),)
+			'fields': (('title',),('status','_type'),)
 		}),
 		(_(''), {
 			'fields': (('description', 'labels'),),
 		}),
 	)
 
-	list_display = ('task_code','app','label','title','created_at','updated_at','closed')
+	list_display = ('task_code','title','app','_type','status','label','created_at','updated_at','closed')
 	search_fields = ('title','app__project__name','app__name')
-	list_filter = ('created_at','updated_at','closed','labels','app__project__name','app')
+	list_filter = ('created_at','updated_at','closed','labels','_type','app__project__name','app')
 
 	inlines = [AttachmentInline,CommentInline]
 
 	def task_code(self, obj):
-		return '#' + str(obj.id)
+		return '#' + str(obj.app.project.id) + str(obj.app.id)  + '-' + str(obj.id)
 
 	def label(self, obj):
 		strg = ""
 		for label in obj.labels.all():
 			strg += '<b style="background:{};border-radius:15px;padding:5px;color:white;margin:5px;">{}</b>'.format(label.color, label.name)
-			# strg += '<b style="color:{};">{}&nbsp;</b>'.format(label.color, label.name)
 		return strg
 	label.allow_tags = True
 
