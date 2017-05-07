@@ -3,16 +3,18 @@ from django.utils.translation import  ugettext_lazy as _
 from django.db import models
 from Project.models import App
 from Setting.models import Label, Status, Type
+from User.models import User
 
 
 class Task(models.Model):
-	app = models.ForeignKey(App, verbose_name=_('App'), related_name='app_task')
+	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
-	labels = models.ManyToManyField(Label, blank=True, null=True, verbose_name=_('Label'), related_name='task_label') 
+	labels = models.ManyToManyField(Label, blank=True, null=True, verbose_name=_('Label'), related_name='task_labels') 
 	_type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
 	title = models.CharField(max_length=200, verbose_name=_('Title'))
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
 	closed = models.BooleanField(default=False ,verbose_name=_('Closed'))
+	assigned_to = models.ForeignKey(User, blank=True, null=True, verbose_name=_('Assigned to'), related_name='task_user')
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 
@@ -24,8 +26,9 @@ class Task(models.Model):
 		verbose_name_plural = _('Tasks')
 
 class Attachment(models.Model):
-	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='task_attachment')
+	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='attachment_task')
 	file = models.FileField(upload_to='attachments/', verbose_name = _('File'))
+	uploaded_by = models.ForeignKey(User, blank=True, null=True, verbose_name=_('Uploaded by'), related_name='attachment_user')
 	details = models.TextField(blank=True, null=True ,verbose_name=_('Details'))
 
 	def __unicode__(self):
@@ -36,8 +39,9 @@ class Attachment(models.Model):
 		verbose_name_plural = _('Attachments')
 
 class Comment(models.Model):
-	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='task_comment')
+	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='comment_task')
 	comment = models.TextField(verbose_name=_('Comment'))
+	created_by = models.ForeignKey(User, blank=True, null=True, verbose_name=_('User'), related_name='comment_user')
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
 

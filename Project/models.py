@@ -15,7 +15,7 @@ class Project(models.Model):
 		verbose_name_plural = _('Projects')
 
 class App(models.Model):
-	project = models.ForeignKey(Project, verbose_name=_('Project'), related_name='project_app')
+	project = models.ForeignKey(Project, verbose_name=_('Project'), related_name='app_project')
 	name = models.CharField(max_length=100, verbose_name=_('App Name'))
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
