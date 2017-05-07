@@ -1,9 +1,11 @@
 from __future__ import unicode_literals
 from django.utils.translation import  ugettext_lazy as _
+from django.dispatch import receiver
 from django.db import models
 from Project.models import App
 from Setting.models import Label, Status, Type
 from User.models import User
+import os
 
 
 class Task(models.Model):
@@ -37,6 +39,36 @@ class Attachment(models.Model):
 	class Meta:
 		verbose_name = _('Attachment')
 		verbose_name_plural = _('Attachments')
+
+@receiver(models.signals.post_delete, sender=Attachment)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Attachment` object is deleted.
+    """
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
+
+@receiver(models.signals.pre_save, sender=Attachment)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `Attachment` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
+
+    try:
+        old_file = Attachment.objects.get(pk=instance.pk).file
+    except Attachment.DoesNotExist:
+        return False
+
+    new_file = instance.file
+    if not old_file == new_file:
+        if os.path.isfile(old_file.path):
+            os.remove(old_file.path)
 
 class Comment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='comment_task')
