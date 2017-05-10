@@ -9,10 +9,11 @@ import os
 
 
 class Task(models.Model):
+	code = models.CharField(max_length=200, verbose_name=_('Code'))
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
 	labels = models.ManyToManyField(Label, blank=True, null=True, verbose_name=_('Label'), related_name='task_labels') 
-	_type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
+	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
 	title = models.CharField(max_length=200, verbose_name=_('Title'))
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
 	closed = models.BooleanField(default=False ,verbose_name=_('Closed'))
@@ -21,11 +22,17 @@ class Task(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return '#' + str(self.app.project.id) + str(self.app.id)  + '-' + str(self.id)
+		return str(self.code)
 
 	class Meta:
 		verbose_name = _('Task')
 		verbose_name_plural = _('Tasks')
+
+	def save(self, *args, **kwargs):
+		if self.id is None:
+			task_number = len(Task.objects.filter(app__project = self.app.project))
+			self.code = '#%s%s' % (str(self.app.project.id),str(task_number))
+		super(Task, self).save(*args, **kwargs) # Call the "real" save() method.
 
 class Attachment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='attachment_task')

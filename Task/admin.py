@@ -24,21 +24,18 @@ class TaskAdmin(admin.ModelAdmin):
 			'fields': (('app','closed'),)
 		}),
 		(_(''), {
-			'fields': (('title','assigned_to'),('status','_type'),)
+			'fields': (('title','assigned_to'),('status','type'),)
 		}),
 		(_(''), {
 			'fields': (('description', 'labels'),),
 		}),
 	)
 
-	list_display = ('task_code','title','app','_type','status','label','assigned_to','created_at','updated_at','closed')
-	search_fields = ('title','app__project__name','app__name')
-	list_filter = ('created_at','updated_at','closed','labels','_type','app__project__name','app')
+	list_display = ('code','title','app','type','status','label','assigned_to','created_at','updated_at','closed')
+	search_fields = ('code','title','app__project__name','app__name')
+	list_filter = ('closed','type','status','labels','assigned_to','app__project__name','app','created_at','updated_at')
 
 	inlines = [AttachmentInline,CommentInline]
-
-	def task_code(self, obj): # create task code
-		return '#' + str(obj.app.project.id) + str(obj.app.id)  + '-' + str(obj.id)
 
 	def label(self, obj): # change label style with label color
 		strg = ""
