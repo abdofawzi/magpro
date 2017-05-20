@@ -1,8 +1,10 @@
 from __future__ import unicode_literals
 from django.utils.translation import  ugettext_lazy as _
+from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
 from django.contrib import admin
-from Task import models
+from Task import models, forms
+from User.models import User
 
 class AttachmentInline(admin.TabularInline):
 	model = models.Attachment
@@ -10,15 +12,40 @@ class AttachmentInline(admin.TabularInline):
 	readonly_fields = ('uploaded_by',)
 	extra = 0
 
-		
+
+class CommentInlineValidation(BaseInlineFormSet):
+	def __init__(self, *args, **kwargs):
+		super(CommentInlineValidation, self).__init__(*args, **kwargs)
+
+	def clean(self):
+		if any(self.errors):
+			return
+		super(CommentInlineValidation, self).clean()
+		manage_owned_comments = False
+		if not self.current_user.is_superuser and len(self.current_user.groups.filter(name="Manage Owned Comments")):
+			manage_owned_comments = True
+		for form in self.forms:
+			if not form.is_valid():
+				return 
+			if form.cleaned_data and form.cleaned_data.get('DELETE'):
+				if manage_owned_comments and form.cleaned_data['id'].created_by != self.current_user:
+					raise ValidationError(_("Can't Delete Other Users Comments"))
+
 class CommentInline(admin.TabularInline):
 	model = models.Comment
 	fields = ('task','created_by','comment','created_at','updated_at')
 	readonly_fields = ('created_by','created_at','updated_at')
 	extra = 0
+	form = forms.CommentForm
+	formset = CommentInlineValidation
+
+	def get_formset(self, request, obj=None, **kwargs):
+		# to pass current user to inline form
+		forms.CommentForm.current_user = request.user
+		CommentInlineValidation.current_user = request.user
+		return super(CommentInline, self).get_formset(request, obj, **kwargs)
 
 class TaskAdmin(admin.ModelAdmin):
-
 	fieldsets = (
 		(None, {
 			'fields': (('app','closed'),)
@@ -36,7 +63,7 @@ class TaskAdmin(admin.ModelAdmin):
 	list_filter = ('closed','type','status','labels','assigned_to','app__project__name','app','created_at','updated_at')
 
 	inlines = [AttachmentInline,CommentInline]
-
+	
 	def label(self, obj): # change label style with label color
 		strg = ""
 		for label in obj.labels.all():
@@ -55,7 +82,6 @@ class TaskAdmin(admin.ModelAdmin):
 				instance.uploaded_by = request.user
 			instance.save()
 		formset.save_m2m()
-
 
 admin.site.register(models.Task, TaskAdmin)
 
