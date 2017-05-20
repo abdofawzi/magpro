@@ -6,11 +6,37 @@ from django.contrib import admin
 from Task import models, forms
 from User.models import User
 
+class AttachmentInlineValidation(BaseInlineFormSet):
+	def __init__(self, *args, **kwargs):
+		super(AttachmentInlineValidation, self).__init__(*args, **kwargs)
+
+	def clean(self):
+		if any(self.errors):
+			return
+		super(AttachmentInlineValidation, self).clean()
+		manage_owned_attachments = False
+		if not self.current_user.is_superuser and len(self.current_user.groups.filter(name="Manage Owned Comments")):
+			manage_owned_attachments = True
+		for form in self.forms:
+			if not form.is_valid():
+				return 
+			if form.cleaned_data and form.cleaned_data.get('DELETE'):
+				if manage_owned_attachments and form.cleaned_data['id'].uploaded_by != self.current_user:
+					raise ValidationError(_("Can't Delete Other Users Attachments"))
+
 class AttachmentInline(admin.TabularInline):
 	model = models.Attachment
 	fields = ('task','uploaded_by','file','details')
 	readonly_fields = ('uploaded_by',)
 	extra = 0
+	form = forms.AttachmentForm
+	formset = AttachmentInlineValidation
+
+	def get_formset(self, request, obj=None, **kwargs):
+		# to pass current user to inline form
+		forms.AttachmentForm.current_user = request.user
+		AttachmentInlineValidation.current_user = request.user
+		return super(AttachmentInline, self).get_formset(request, obj, **kwargs)
 
 
 class CommentInlineValidation(BaseInlineFormSet):
@@ -76,9 +102,9 @@ class TaskAdmin(admin.ModelAdmin):
 		for obj in formset.deleted_objects:
 			obj.delete()
 		for instance in instances:
-			if isinstance(instance, models.Comment): #check if is Comment instance 
+			if isinstance(instance, models.Comment) and not instance.id: #check if is Comment instance 
 				instance.created_by = request.user
-			elif isinstance(instance, models.Attachment): #check if is Attachment instance 
+			elif isinstance(instance, models.Attachment) and not instance.id: #check if is Attachment instance 
 				instance.uploaded_by = request.user
 			instance.save()
 		formset.save_m2m()

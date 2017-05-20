@@ -36,7 +36,7 @@ class Task(models.Model):
 
 class Attachment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='attachment_task')
-	file = models.FileField(upload_to='attachments/', verbose_name = _('File'))
+	file = models.FileField(upload_to='task_attachments/', verbose_name = _('File'))
 	uploaded_by = models.ForeignKey(User, blank=True, null=True, verbose_name=_('Uploaded by'), related_name='attachment_user')
 	details = models.TextField(blank=True, null=True ,verbose_name=_('Details'))
 
