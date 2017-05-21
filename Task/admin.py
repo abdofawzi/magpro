@@ -15,7 +15,7 @@ class AttachmentInlineValidation(BaseInlineFormSet):
 			return
 		super(AttachmentInlineValidation, self).clean()
 		manage_owned_attachments = False
-		if not self.current_user.is_superuser and len(self.current_user.groups.filter(name="Manage Owned Comments")):
+		if not self.current_user.is_superuser and self.current_user.groups.filter(name="Manage Owned Comments").exists():
 			manage_owned_attachments = True
 		for form in self.forms:
 			if not form.is_valid():
@@ -33,7 +33,7 @@ class AttachmentInline(admin.TabularInline):
 	formset = AttachmentInlineValidation
 
 	def get_formset(self, request, obj=None, **kwargs):
-		# to pass current user to inline form
+		# to pass current user
 		forms.AttachmentForm.current_user = request.user
 		AttachmentInlineValidation.current_user = request.user
 		return super(AttachmentInline, self).get_formset(request, obj, **kwargs)
@@ -48,7 +48,7 @@ class CommentInlineValidation(BaseInlineFormSet):
 			return
 		super(CommentInlineValidation, self).clean()
 		manage_owned_comments = False
-		if not self.current_user.is_superuser and len(self.current_user.groups.filter(name="Manage Owned Comments")):
+		if not self.current_user.is_superuser and self.current_user.groups.filter(name="Manage Owned Comments").exists():
 			manage_owned_comments = True
 		for form in self.forms:
 			if not form.is_valid():
@@ -66,7 +66,7 @@ class CommentInline(admin.TabularInline):
 	formset = CommentInlineValidation
 
 	def get_formset(self, request, obj=None, **kwargs):
-		# to pass current user to inline form
+		# to pass current user
 		forms.CommentForm.current_user = request.user
 		CommentInlineValidation.current_user = request.user
 		return super(CommentInline, self).get_formset(request, obj, **kwargs)
@@ -89,7 +89,22 @@ class TaskAdmin(admin.ModelAdmin):
 	list_filter = ('closed','type','status','labels','assigned_to','app__project__name','app','created_at','updated_at')
 
 	inlines = [AttachmentInline,CommentInline]
-	
+
+	def render_change_form(self, request, context, *args, **kwargs):
+		if not request.user.is_superuser and request.user.groups.filter(name='Manage Owned Tasks').exists():
+			if 'assigned_to' in context['adminform'].form.fields.keys():
+				context['adminform'].form.fields['assigned_to'].queryset = User.objects.filter(id=request.user.id)
+		return super(TaskAdmin, self).render_change_form(request, context, args, kwargs)             
+
+	def get_readonly_fields(self, request, obj=None):
+		if request.user.is_superuser or obj is None:
+			return self.readonly_fields
+		elif request.user.groups.filter(name='Manage Owned Tasks').exists():
+			if obj.assigned_to == request.user:
+				return ('assigned_to',)
+			else:
+				return ('app','closed','title','assigned_to','status','type','description', 'labels')
+
 	def label(self, obj): # change label style with label color
 		strg = ""
 		for label in obj.labels.all():
