@@ -108,7 +108,6 @@ types_group, created  = Group.objects.get_or_create(name = 'Manage Owned Tasks')
 types_group.permissions.clear()
 types_group.permissions.add(Permission.objects.get(codename = "add_task"))
 types_group.permissions.add(Permission.objects.get(codename = "change_task"))
-types_group.permissions.add(Permission.objects.get(codename = "delete_task"))
 # group user can edit Tasks
 types_group, created  = Group.objects.get_or_create(name = 'Edit Tasks')
 types_group.permissions.clear()
