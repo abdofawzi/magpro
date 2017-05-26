@@ -12,7 +12,7 @@ class Task(models.Model):
 	code = models.CharField(max_length=200, verbose_name=_('Code'))
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
-	labels = models.ManyToManyField(Label, blank=True, null=True, verbose_name=_('Label'), related_name='task_labels') 
+	labels = models.ManyToManyField(Label, blank=True, verbose_name=_('Label'), related_name='task_labels') 
 	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
 	title = models.CharField(max_length=200, verbose_name=_('Title'))
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))

@@ -40,10 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'colorful',
+    'pagedown',
     'Project',
     'Task',
     'Setting',
     'User',
+    'Wiki',
 ]
 
 MIDDLEWARE = [
@@ -128,4 +130,4 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR + MEDIA_URL
-STATIC_ROOT = BASE_DIR + 'static-root/'
+STATIC_ROOT = BASE_DIR + '/static-root/'

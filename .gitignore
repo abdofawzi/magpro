@@ -9,5 +9,8 @@
 # Ignore DB dump
 db.sqlite3
 
+# Igonre static-root
+/static-root
+
 # Ignore uploaded file
 /media/task_attachments

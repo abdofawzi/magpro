@@ -2,3 +2,7 @@
 # https://github.com/charettes/django-colorful
 pip install django-colorful
 
+# allows the easy addition of Stack Overflow's "Pagedown" Markdown editor to a django form field
+# https://github.com/timmyomahony/django-pagedown
+pip install django-pagedown
+
