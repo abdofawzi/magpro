@@ -25,7 +25,7 @@ class WikiAdmin(admin.ModelAdmin):
 	)
 
 	list_display = ('title','label','created_by','created_at','updated_at')
-	search_fields = ('title','created_by')
+	search_fields = ('title',)
 	list_filter = ('labels','created_by','created_at','updated_at')
 
 	inlines = [CommentInline]
@@ -46,6 +46,11 @@ class WikiAdmin(admin.ModelAdmin):
 				instance.created_by = request.user
 			instance.save()
 		formset.save_m2m()
+
+	def save_model(self, request, obj, form, change):
+		if not obj.id:
+			obj.created_by = request.user
+		super(WikiAdmin, self).save_model(request, obj, form, change)
 
 admin.site.register(models.Wiki, WikiAdmin)
 admin.site.register(models.Label)
