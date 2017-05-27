@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 from django.utils.translation import  ugettext_lazy as _
+from django.utils.functional import lazy
 from django.dispatch import receiver
 from django.db import models
 from Project.models import App
@@ -9,8 +10,18 @@ import os
 
 
 class Task(models.Model):
+
+	# create list of tubles with weight choices
+	def weight_choices():
+		weights = []
+		for i in range(1,21):
+			weights.append((i,i))
+		return weights
+	WEIGHT_CHOICES = weight_choices()
+
 	code = models.CharField(max_length=200, verbose_name=_('Code'))
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
+	weight = models.IntegerField(choices=WEIGHT_CHOICES, blank=True, null=True, verbose_name=_('Weight'))
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
 	labels = models.ManyToManyField(Label, blank=True, verbose_name=_('Label'), related_name='task_labels') 
 	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
@@ -49,33 +60,33 @@ class Attachment(models.Model):
 
 @receiver(models.signals.post_delete, sender=Attachment)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes file from filesystem
-    when corresponding `Attachment` object is deleted.
-    """
-    if instance.file:
-        if os.path.isfile(instance.file.path):
-            os.remove(instance.file.path)
+	"""
+	Deletes file from filesystem
+	when corresponding `Attachment` object is deleted.
+	"""
+	if instance.file:
+		if os.path.isfile(instance.file.path):
+			os.remove(instance.file.path)
 
 @receiver(models.signals.pre_save, sender=Attachment)
 def auto_delete_file_on_change(sender, instance, **kwargs):
-    """
-    Deletes old file from filesystem
-    when corresponding `Attachment` object is updated
-    with new file.
-    """
-    if not instance.pk:
-        return False
+	"""
+	Deletes old file from filesystem
+	when corresponding `Attachment` object is updated
+	with new file.
+	"""
+	if not instance.pk:
+		return False
 
-    try:
-        old_file = Attachment.objects.get(pk=instance.pk).file
-    except Attachment.DoesNotExist:
-        return False
+	try:
+		old_file = Attachment.objects.get(pk=instance.pk).file
+	except Attachment.DoesNotExist:
+		return False
 
-    new_file = instance.file
-    if not old_file == new_file:
-        if os.path.isfile(old_file.path):
-            os.remove(old_file.path)
+	new_file = instance.file
+	if not old_file == new_file:
+		if os.path.isfile(old_file.path):
+			os.remove(old_file.path)
 
 class Comment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='comment_task')

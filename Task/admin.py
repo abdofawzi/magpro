@@ -77,16 +77,16 @@ class TaskAdmin(admin.ModelAdmin):
 			'fields': (('app','closed'),)
 		}),
 		(_(''), {
-			'fields': (('title','assigned_to'),('status','type'),)
+			'fields': (('title','assigned_to'),('weight','status','type'),)
 		}),
 		(_(''), {
 			'fields': (('description', 'labels'),),
 		}),
 	)
 
-	list_display = ('code','title','app','type','status','label','assigned_to','created_at','updated_at','closed')
+	list_display = ('code','title','weight','app','type','status','label','assigned_to','created_at','updated_at','closed')
 	search_fields = ('code','title','app__project__name','app__name')
-	list_filter = ('closed','type','status','labels','assigned_to','app__project__name','app','created_at','updated_at')
+	list_filter = ('closed','type','status','labels','assigned_to','app__project__name','app','weight','created_at','updated_at')
 
 	inlines = [AttachmentInline,CommentInline]
 
