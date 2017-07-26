@@ -13,6 +13,11 @@ class UserAdmin(django_admin):
 												   'groups', 'user_permissions')}),
 					(_('Important dates'), {'fields': ('date_joined',)}),
 				)
+	user_fieldsets = (
+						(None, {'fields': ('username', 'password')}),
+						(_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
+						(_('Important dates'), {'fields': ('date_joined',)}),
+					)
 	readonly_fields = ('last_login','date_joined')
 	def get_queryset(self, request):
 		qs = super(UserAdmin, self).get_queryset(request)
@@ -20,16 +25,10 @@ class UserAdmin(django_admin):
 			return qs
 		return qs.filter(id=request.user.id) #hide all others user if is not superuser
 
-
 	def get_fieldsets(self, request, obj=None):
-		if request.user.is_superuser:
-			return self.fieldsets
-		else:
-			return (
-						(None, {'fields': ('username', 'password')}),
-						(_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-						(_('Important dates'), {'fields': ('date_joined',)}),
-					)
+		if not request.user.is_superuser:
+			return self.user_fieldsets
+		return super(UserAdmin, self).get_fieldsets(request, obj)
 				
 
 admin.site.register(User, UserAdmin)
