@@ -9,7 +9,7 @@ class CommentForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(CommentForm, self).__init__(*args, **kwargs)
 		manage_owned_comments = False
-		if not self.current_user.is_superuser and self.current_user.groups.filter(name='Manage Owned Comments').exists():
+		if not self.current_user.is_superuser and self.current_user.groups.filter(name='Comments - Manage Owned Comments').exists():
 			manage_owned_comments = True
 		if self.instance.pk and manage_owned_comments and self.instance.created_by != self.current_user:
 			self.fields['comment'].widget = ReadOnlyTextarea()
@@ -19,7 +19,7 @@ class AttachmentForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		super(AttachmentForm, self).__init__(*args, **kwargs)
 		manage_owned_attachments = False
-		if not self.current_user.is_superuser and self.current_user.groups.filter(name='Manage Owned Attachments').exists():
+		if not self.current_user.is_superuser and self.current_user.groups.filter(name='Attachments - Manage Owned Attachments').exists():
 			manage_owned_attachments = True
 		if self.instance.pk and manage_owned_attachments and self.instance.uploaded_by != self.current_user:
 			self.fields['details'].widget = ReadOnlyTextarea()
