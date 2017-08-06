@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'Task',
     'Setting',
     'Wiki',
+    'APIDoc',
 ]
 
 MIDDLEWARE = [
