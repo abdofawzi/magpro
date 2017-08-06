@@ -4,6 +4,7 @@ MagPro is project management web app based on [DJango framework](https://www.dja
 * **Tasks**
 * **Users**
 * **Wiki**
+* **API Documentation**
 
 ## Installation
 * **required DJango 1.11:**  Follow [Django Quick install guide](https://docs.djangoproject.com/en/1.11/intro/install/)
