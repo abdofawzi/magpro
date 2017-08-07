@@ -33,8 +33,8 @@ class RouteAdmin(admin.ModelAdmin):
 	def parameters(self, obj): # list_display with all parameters
 		strg = ""
 		for parameter in obj.parameter_route.all():
-			strg += '<b style="">*  {}</b>'.format(parameter.name)
-			return strg
+			strg += '<b style="">-  {}<br></b>'.format(parameter.name)
+		return strg
 	parameters.allow_tags = True
 
 	inlines = [ParameterInline,ResponseInline]
