@@ -127,6 +127,23 @@ types_group.permissions.add(Permission.objects.get(codename = 'add_wiki', conten
 types_group.permissions.add(Permission.objects.get(codename = 'change_wiki', content_type__app_label = 'Wiki'))
 types_group.permissions.add(Permission.objects.get(codename = 'delete_wiki', content_type__app_label = 'Wiki'))
 
+# group to manage API Documentation
+types_group, created  = Group.objects.get_or_create(name = 'APIDoc - Manage API Documentation')
+types_group.permissions.clear()
+types_group.permissions.add(Permission.objects.get(codename = 'add_httpstatus'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_httpstatus'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_httpstatus'))
+types_group.permissions.add(Permission.objects.get(codename = 'add_parameter'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_parameter'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_parameter'))
+types_group.permissions.add(Permission.objects.get(codename = 'add_response'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_response'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_response'))
+types_group.permissions.add(Permission.objects.get(codename = 'add_route'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_route'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_route'))
+
+
 
 print 'Done Creating all Permissions Groups'
 
