@@ -63,6 +63,7 @@ class Response(models.Model):
 	route = models.ForeignKey(Route, verbose_name=_('Route'), related_name='response_route')
 	http_status = models.ForeignKey(HTTPStatus, verbose_name=_('HTTP Status'), related_name='base_url_default_response')
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
+	example = models.TextField(blank=True, null=True ,verbose_name=_('Example'))
 
 	def __unicode__(self):
 		return str(self.http_status)

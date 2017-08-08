@@ -142,7 +142,6 @@ types_group.permissions.add(Permission.objects.get(codename = 'delete_response')
 types_group.permissions.add(Permission.objects.get(codename = 'add_route'))
 types_group.permissions.add(Permission.objects.get(codename = 'change_route'))
 types_group.permissions.add(Permission.objects.get(codename = 'delete_route'))
-
 types_group.permissions.add(Permission.objects.get(codename = 'add_datatype'))
 types_group.permissions.add(Permission.objects.get(codename = 'change_datatype'))
 types_group.permissions.add(Permission.objects.get(codename = 'delete_datatype'))

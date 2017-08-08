@@ -103,7 +103,7 @@ class TaskAdmin(admin.ModelAdmin):
 			if obj.assigned_to == request.user:
 				return ('assigned_to',)
 			else:
-				return ('app','closed','title','assigned_to','status','type','description', 'labels')
+				return ('app','closed','title','assigned_to','status','type','weight','description', 'labels')
 
 	def label(self, obj): # change label style with label color
 		strg = ""

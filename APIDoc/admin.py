@@ -10,7 +10,7 @@ class ParameterInline(admin.TabularInline):
 
 class ResponseInline(admin.TabularInline):
 	model = models.Response
-	fields = ('route','http_status','description')
+	fields = ('route','http_status','example','description')
 	extra = 0
 
 class RouteAdmin(admin.ModelAdmin):
