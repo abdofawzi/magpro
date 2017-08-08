@@ -5,7 +5,7 @@ from APIDoc import models
 
 class ParameterInline(admin.TabularInline):
 	model = models.Parameter
-	fields = ('route','name','description')
+	fields = ('route','name','type','description')
 	extra = 0
 
 class ResponseInline(admin.TabularInline):
@@ -16,10 +16,10 @@ class ResponseInline(admin.TabularInline):
 class RouteAdmin(admin.ModelAdmin):
 	fieldsets = (
 		(None, {
-			'fields': (('app',),)
+			'fields': (('app',),('title',),)
 		}),
 		(_(''), {
-			'fields': ('method','url',)
+			'fields': (('method','url'),)
 		}),
 		(_(''), {
 			'fields': ('description',),
@@ -40,5 +40,6 @@ class RouteAdmin(admin.ModelAdmin):
 	inlines = [ParameterInline,ResponseInline]
 
 
+admin.site.register(models.DataType)
 admin.site.register(models.HTTPStatus)
 admin.site.register(models.Route,RouteAdmin)

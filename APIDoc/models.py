@@ -24,6 +24,7 @@ class Route(models.Model):
 		)
 
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='route_app')
+	title = models.CharField(max_length=100, verbose_name=_('Title'))
 	method = models.CharField(max_length=20,choices=method_choices, verbose_name=_('Method'))
 	url = models.CharField(max_length=100, verbose_name=_('Base URL'))
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
@@ -35,9 +36,20 @@ class Route(models.Model):
 		verbose_name = _('Route')
 		verbose_name_plural = _('Routes')
 
+class DataType(models.Model):
+	name = models.CharField(max_length=50, verbose_name=_('Name'))
+
+	def __unicode__(self):
+		return str(self.name)
+
+	class Meta:
+		verbose_name = _('Data Type')
+		verbose_name_plural = _('Data Types')
+
 class Parameter(models.Model):
 	route = models.ForeignKey(Route, verbose_name=_('Route'), related_name='parameter_route')
-	name = models.CharField(max_length=20, verbose_name=_('Description'))
+	name = models.CharField(max_length=20, verbose_name=_('Name'))
+	type = models.ForeignKey(DataType, verbose_name=_('Type'), related_name='parameter_type')
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
 
 	def __unicode__(self):
@@ -58,6 +70,7 @@ class Response(models.Model):
 	class Meta:
 		verbose_name = _('Response')
 		verbose_name_plural = _('Responses')
+
 
 
 
