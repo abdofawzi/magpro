@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db import models
 from Project.models import App
 from Setting.models import Label, Status, Type
+from django.db.models import Max
 from User.models import User
 import os
 
@@ -41,9 +42,15 @@ class Task(models.Model):
 
 	def save(self, *args, **kwargs):
 		if self.id is None:
-			task_number = len(Task.objects.filter(app__project = self.app.project))
-			self.code = '#%s%s' % (str(self.app.project.id),str(task_number))
+			task_number = Task.objects.filter(app = self.app).aggregate(Max('code'))
+			if task_number['code__max']:
+				task_number = int(task_number['code__max'][(len("#%s"%(self.app.id))):])+1
+			else:
+				task_number = 0
+
+			self.code = '#%s%s' % (str(self.app.id),str(task_number))
 		super(Task, self).save(*args, **kwargs) # Call the "real" save() method.
+
 
 class Attachment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='attachment_task')
