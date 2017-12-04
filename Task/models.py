@@ -15,7 +15,7 @@ class Task(models.Model):
 	# create list of tubles with weight choices
 	def weight_choices():
 		weights = []
-		for i in range(1,21):
+		for i in range(1,10):
 			weights.append((i,i))
 		return weights
 	WEIGHT_CHOICES = weight_choices()
@@ -65,6 +65,7 @@ class Attachment(models.Model):
 		verbose_name = _('Attachment')
 		verbose_name_plural = _('Attachments')
 
+
 @receiver(models.signals.post_delete, sender=Attachment)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
 	"""
@@ -94,6 +95,7 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
 	if not old_file == new_file:
 		if os.path.isfile(old_file.path):
 			os.remove(old_file.path)
+
 
 class Comment(models.Model):
 	task = models.ForeignKey(Task, verbose_name=_('Task'), related_name='comment_task')

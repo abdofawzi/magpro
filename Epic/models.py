@@ -1,0 +1,50 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+from django.utils.translation import  ugettext_lazy as _
+from Project.models import Project
+from Setting.models import Label
+from django.db import models
+
+
+class Actor(models.Model):
+	project = models.ForeignKey(Project, verbose_name=_('Project'), related_name='actor_project')
+	name = models.CharField(max_length=100, blank=True, null=True ,verbose_name=_('Actor Name'))
+	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
+
+	def __unicode__(self):
+		return "%s-%s" % (unicode(self.project),unicode(self.name))
+
+	class Meta:
+		verbose_name = _('Actor')
+		verbose_name_plural = _('Actors')
+
+
+class Epic(models.Model):
+	project = models.ForeignKey(Project, verbose_name=_('Project'), related_name='epic_project')
+	title = models.CharField(max_length=100, blank=True, null=True ,verbose_name=_('Title'))
+	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
+
+	def __unicode__(self):
+		return "%s-%s" % (unicode(self.project),unicode(self.title))
+
+	class Meta:
+		verbose_name = _('Epic')
+		verbose_name_plural = _('Epics')
+
+
+class UserStory(models.Model):
+	epic = models.ForeignKey(Epic, verbose_name=_('Epic'), related_name='user_story_epic')
+	as_a = models.ForeignKey(Actor,verbose_name=_('As a'))
+	want_to = models.TextField(verbose_name=_('Want to'))
+	so_that = models.TextField(verbose_name=_('So that'))
+	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
+	labels = models.ManyToManyField(Label, blank=True, verbose_name=_('Label'), related_name='user_story_labels') 
+
+	def __unicode__(self):
+		return "As a %s want to %s" % (unicode(self.epic) + 'As ' + unicode(self.as_a))
+
+	class Meta:
+		verbose_name = _('User Story')
+		verbose_name_plural = _('User Stories')
+
+

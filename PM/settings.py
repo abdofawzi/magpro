@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'Setting',
     'Wiki',
     'APIDoc',
+    'Epic',
 ]
 
 MIDDLEWARE = [
