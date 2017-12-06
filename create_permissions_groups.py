@@ -146,6 +146,19 @@ types_group.permissions.add(Permission.objects.get(codename = 'add_datatype'))
 types_group.permissions.add(Permission.objects.get(codename = 'change_datatype'))
 types_group.permissions.add(Permission.objects.get(codename = 'delete_datatype'))
 
+# group to manage API Documentation
+types_group, created  = Group.objects.get_or_create(name = 'Epic - Manage Epics')
+types_group.permissions.clear()
+types_group.permissions.add(Permission.objects.get(codename = 'add_epic'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_epic'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_epic'))
+types_group.permissions.add(Permission.objects.get(codename = 'add_actor'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_actor'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_actor'))
+
+types_group.permissions.add(Permission.objects.get(codename = 'add_userstory'))
+types_group.permissions.add(Permission.objects.get(codename = 'change_userstory'))
+types_group.permissions.add(Permission.objects.get(codename = 'delete_userstory'))
 
 
 print 'Done Creating all Permissions Groups'
