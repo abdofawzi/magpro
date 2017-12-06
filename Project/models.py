@@ -21,7 +21,7 @@ class App(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return unicode(self.project.name) + '-' + unicode(self.name)
+		return "%s-%s" % (unicode(self.project.name),unicode(self.name))
 
 	class Meta:
 		verbose_name = _('App')

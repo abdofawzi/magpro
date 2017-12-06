@@ -7,6 +7,7 @@ from Project.models import App
 from Setting.models import Label, Status, Type
 from django.db.models import Max
 from User.models import User
+from Epic.models import UserStory
 import os
 
 
@@ -21,6 +22,7 @@ class Task(models.Model):
 	WEIGHT_CHOICES = weight_choices()
 
 	code = models.CharField(max_length=200, verbose_name=_('Code'))
+	user_story = models.ForeignKey(UserStory, blank=True, null=True, verbose_name=_('User Story'), related_name='task_user_story')
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
 	weight = models.IntegerField(choices=WEIGHT_CHOICES, blank=True, null=True, verbose_name=_('Weight'))
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
@@ -105,7 +107,7 @@ class Comment(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return str(self.task) + 'C' + str(self.id)
+		return "%s-%s" % (str(self.task),str(self.created_by.id))
 
 	class Meta:
 		verbose_name = _('Comment')
