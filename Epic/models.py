@@ -12,7 +12,8 @@ class Actor(models.Model):
 	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
 
 	def __unicode__(self):
-		return "%s-%s" % (unicode(self.project),unicode(self.name))
+		# return "%s-%s" % (unicode(self.project),unicode(self.name))
+		return unicode(self.name)
 
 	class Meta:
 		verbose_name = _('Actor')
@@ -27,7 +28,8 @@ class Epic(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return "%s-%s" % (unicode(self.project),unicode(self.title))
+		# return "%s-%s" % (unicode(self.project),unicode(self.title))
+		return unicode(self.title)
 
 	class Meta:
 		verbose_name = _('Epic')
@@ -45,7 +47,8 @@ class UserStory(models.Model):
 	updated_at = models.DateTimeField(auto_now=True)
 
 	def __unicode__(self):
-		return "As a (%s) want to (%s)" % (unicode(self.actor), unicode(self.want_to))
+		# return "As a (%s) want to (%s)" % (unicode(self.actor), unicode(self.want_to))
+		return "%s - %s" % (unicode(self.actor), unicode(self.want_to))
 
 	class Meta:
 		verbose_name = _('User Story')
