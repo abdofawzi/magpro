@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'colorful',
     'pagedown',
+    'ckeditor',
     'User',
     'Project',
     'Task',
@@ -59,6 +60,22 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+            ['TextColor', 'BGColor'],
+            ['RemoveFormat', 'Source'],
+            ['Styles', 'Format', 'Font', 'FontSize'],
+        ]
+    }
+}
 
 ROOT_URLCONF = 'PM.urls'
 

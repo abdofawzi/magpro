@@ -8,6 +8,7 @@ from Setting.models import Label, Status, Type
 from django.db.models import Max
 from User.models import User
 from Epic.models import UserStory
+from ckeditor.fields import RichTextField
 import os
 
 
@@ -29,7 +30,7 @@ class Task(models.Model):
 	labels = models.ManyToManyField(Label, blank=True, verbose_name=_('Label'), related_name='task_labels') 
 	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
 	title = models.CharField(max_length=200, verbose_name=_('Title'))
-	description = models.TextField(blank=True, null=True ,verbose_name=_('Description'))
+	description = RichTextField(blank=True, null=True ,verbose_name=_('Description'))
 	closed = models.BooleanField(default=False ,verbose_name=_('Closed'))
 	assigned_to = models.ForeignKey(User, blank=True, null=True, verbose_name=_('Assigned to'), related_name='task_user')
 	created_at = models.DateTimeField(auto_now_add=True)

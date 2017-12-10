@@ -13,17 +13,21 @@ class ActorAdmin(admin.ModelAdmin):
 
 class UserStoryInline(admin.TabularInline):
 	model = models.UserStory
-	fields = ('epic','actor','want_to','so_that','description','labels','created_at','updated_at',)
+	fields = ('epic','actor','want_to','so_that','description','labels','created_at','updated_at')
 	readonly_fields = ('created_at','updated_at',)
 	extra = 0
 
 
 class EpicAdmin(admin.ModelAdmin):
-	list_display = ('project','title','description',)
+	list_display = ('project','title','formatted_description',)
 	search_fields = ('project__name','title','description',)
 	list_filter = ('created_at','updated_at','project__name','user_story_epic__actor__name','user_story_epic__labels',)
 
 	inlines = [UserStoryInline,]
+
+	def formatted_description(self, obj): # change label style with label color
+		return '{}'.format(obj.description)
+	formatted_description.allow_tags = True
 
 
 class TaskInline(admin.TabularInline):
@@ -34,7 +38,7 @@ class TaskInline(admin.TabularInline):
 
 
 class UserStoryAdmin(admin.ModelAdmin):
-	list_display = ('epic','actor','want_to','so_that','label','created_at','updated_at',)
+	list_display = ('epic','actor','want_to','so_that','formatted_description','label','created_at','updated_at',)
 	search_fields = ('epic','actor__name','want_to','description',)
 	list_filter = ('created_at','updated_at','epic__project__name','actor__name','labels',)
 
@@ -44,6 +48,10 @@ class UserStoryAdmin(admin.ModelAdmin):
 			strg += '<b style="background:{};border-radius:15px;padding:5px;color:white;margin:5px;">{}</b>'.format(label.color, label.name)
 		return strg
 	label.allow_tags = True
+
+	def formatted_description(self, obj): # change label style with label color
+		return '{}'.format(obj.description)
+	formatted_description.allow_tags = True
 
 	inlines = [TaskInline,]
 
