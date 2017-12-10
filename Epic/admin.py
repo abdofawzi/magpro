@@ -38,7 +38,7 @@ class TaskInline(admin.TabularInline):
 
 
 class UserStoryAdmin(admin.ModelAdmin):
-	list_display = ('epic','actor','want_to','so_that','formatted_description','label','created_at','updated_at',)
+	list_display = ('epic','actor','want_to','formatted_description','label','created_at','updated_at',)
 	search_fields = ('epic','actor__name','want_to','description',)
 	list_filter = ('created_at','updated_at','epic__project__name','actor__name','labels',)
 
