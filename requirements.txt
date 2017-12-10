@@ -6,3 +6,7 @@ pip install django-colorful
 # https://github.com/timmyomahony/django-pagedown
 pip install django-pagedown
 
+# Django admin CKEditor integration.
+# https://github.com/django-ckeditor/django-ckeditor
+sudo pip install django-ckeditor
+
