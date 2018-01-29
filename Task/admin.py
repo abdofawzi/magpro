@@ -85,6 +85,9 @@ class TaskAdmin(admin.ModelAdmin):
 			'fields': (('title','assigned_to'),('weight','status','type'),)
 		}),
 		(_(''), {
+			'fields': (('estimated_time','actual_time'),)
+		}),
+		(_(''), {
 			'fields': (('description', 'labels'),),
 		}),
 	)

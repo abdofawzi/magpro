@@ -31,6 +31,8 @@ class Task(models.Model):
 	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 
 	title = models.CharField(max_length=200, verbose_name=_('Title'))
 	description = RichTextField(blank=True, null=True ,verbose_name=_('Description'))
+	estimated_time = models.IntegerField(blank=True, null=True, verbose_name=_('Estimated Time'),help_text=_('in hours'))
+	actual_time = models.IntegerField(blank=True, null=True, verbose_name=_('Actual Time'),help_text=_('in hours'))
 	closed = models.BooleanField(default=False ,verbose_name=_('Closed'))
 	assigned_to = models.ForeignKey(User, blank=True, null=True, verbose_name=_('Assigned to'), related_name='task_user')
 	created_at = models.DateTimeField(auto_now_add=True)
