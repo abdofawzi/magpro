@@ -105,7 +105,7 @@ class TaskAdmin(admin.ModelAdmin):
 		return super(TaskAdmin, self).render_change_form(request, context, args, kwargs)             
 
 	def get_readonly_fields(self, request, obj=None):
-		if request.user.is_superuser or obj is None:
+		if request.user.groups.filter(name='Tasks - Manage Tasks').exists() or request.user.is_superuser or obj is None:
 			return self.readonly_fields
 		elif request.user.groups.filter(name='Tasks - Manage Owned Tasks').exists() or  request.user.groups.filter(name='Tasks - Edit Owned Tasks').exists():
 			if obj.assigned_to == request.user:
