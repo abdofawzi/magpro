@@ -32,7 +32,7 @@ class EpicAdmin(admin.ModelAdmin):
 
 class TaskInline(admin.TabularInline):
 	model = Task
-	fields = ('closed','code','user_story','app','title','assigned_to','weight','status','type','labels','description','created_at','updated_at',)
+	fields = ('closed','code','user_story','app','title','assigned_to','priority','status','type','labels','description','created_at','updated_at',)
 	readonly_fields = ('code','closed','created_at','updated_at',)
 	extra = 0
 

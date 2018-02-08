@@ -14,19 +14,19 @@ import os
 
 class Task(models.Model):
 
-	# create list of tubles with weight choices
-	def weight_choices():
-		weights = []
+	# create list of tubles with priority choices
+	def priority_choices():
+		priority = []
 		for i in range(1,10):
-			weights.append((i,i))
-		return weights
-	WEIGHT_CHOICES = weight_choices()
+			priority.append((i,i))
+		return priority
+	PRIORITY_CHOICES = priority_choices()
 
 	code_number = models.IntegerField(verbose_name=_('Code Number'))
 	code = models.CharField(max_length=200, verbose_name=_('Code'))
 	user_story = models.ForeignKey(UserStory, blank=True, null=True, verbose_name=_('User Story'), related_name='task_user_story')
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
-	weight = models.IntegerField(choices=WEIGHT_CHOICES, blank=True, null=True, verbose_name=_('Weight'))
+	priority = models.IntegerField(choices=PRIORITY_CHOICES, blank=True, null=True, verbose_name=_('Priority'))
 	status = models.ForeignKey(Status, blank=True, null=True, verbose_name=_('Status'), related_name='task_status')
 	labels = models.ManyToManyField(Label, blank=True, verbose_name=_('Label'), related_name='task_labels') 
 	type = models.ForeignKey(Type, blank=True, null=True, verbose_name=_('Type'), related_name='task_type') 

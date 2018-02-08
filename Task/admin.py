@@ -82,7 +82,7 @@ class TaskAdmin(admin.ModelAdmin):
 			'fields': (('app','closed'),('user_story',),)
 		}),
 		(_(''), {
-			'fields': (('title','assigned_to'),('weight','status','type'),)
+			'fields': (('title','assigned_to'),('priority','status','type'),)
 		}),
 		(_(''), {
 			'fields': (('estimated_time','actual_time'),)
@@ -92,9 +92,9 @@ class TaskAdmin(admin.ModelAdmin):
 		}),
 	)
 
-	list_display = ('code','title','weight','app','type','status','label','assigned_to','created_at','updated_at','closed')
+	list_display = ('code','title','priority','app','type','status','label','assigned_to','created_at','updated_at','closed')
 	search_fields = ('code','title','app__project__name','app__name')
-	list_filter = ('created_at','updated_at','closed','type','status','labels','assigned_to','app__project__name','app','weight',)
+	list_filter = ('created_at','updated_at','closed','type','status','labels','assigned_to','app__project__name','app','priority',)
 
 	inlines = [AttachmentInline,CommentInline]
 
@@ -111,7 +111,7 @@ class TaskAdmin(admin.ModelAdmin):
 			if obj.assigned_to == request.user:
 				return ('assigned_to',)
 			else:
-				return ('app','closed','title','assigned_to','status','type','weight','description', 'labels')
+				return ('app','closed','title','assigned_to','status','type','priority','description', 'labels')
 
 	def label(self, obj): # change label style with label color
 		strg = ""
