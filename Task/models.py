@@ -22,6 +22,7 @@ class Task(models.Model):
 		return weights
 	WEIGHT_CHOICES = weight_choices()
 
+	code_number = models.IntegerField(verbose_name=_('Code Number'))
 	code = models.CharField(max_length=200, verbose_name=_('Code'))
 	user_story = models.ForeignKey(UserStory, blank=True, null=True, verbose_name=_('User Story'), related_name='task_user_story')
 	app = models.ForeignKey(App, verbose_name=_('App'), related_name='task_app')
@@ -47,13 +48,13 @@ class Task(models.Model):
 
 	def save(self, *args, **kwargs):
 		if self.id is None:
-			task_number = Task.objects.filter(app = self.app).aggregate(Max('code'))
-			if task_number['code__max']:
-				task_number = int(task_number['code__max'][(len("#%s"%(self.app.id))):])+1
+			code_number = Task.objects.filter(app = self.app).aggregate(Max('code_number'))['code_number__max']
+			if code_number is not None:
+				code_number += 1
 			else:
-				task_number = 0
-
-			self.code = '#%s%s' % (str(self.app.id),str(task_number))
+				code_number = 0
+			self.code_number = code_number
+			self.code = '#%s-%s' % (self.app.id,code_number)
 		super(Task, self).save(*args, **kwargs) # Call the "real" save() method.
 
 
