@@ -132,10 +132,6 @@ class TaskAdmin(admin.ModelAdmin):
 			instance.save()
 		formset.save_m2m()
 
-	# def save_model(self, request, obj, form, change):
-	# 	obj.save()
-
-
 	def save_model(self, request, obj, form, change):
 		if not obj.assigned_to:
 			obj.assigned_to = request.user
