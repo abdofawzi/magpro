@@ -92,7 +92,7 @@ class TaskAdmin(admin.ModelAdmin):
 		}),
 	)
 
-	list_display = ('code','title','priority','app','type','status','label','assigned_to','created_at','updated_at','closed')
+	list_display = ('code','title','priority','app','type','status','label','assigned_to','estimated_time','actual_time','updated_at','closed')
 	search_fields = ('code','title','app__project__name','app__name')
 	list_filter = ('created_at','updated_at','closed','type','status','labels','assigned_to','app__project__name','app','priority',)
 
@@ -131,6 +131,7 @@ class TaskAdmin(admin.ModelAdmin):
 				instance.uploaded_by = request.user
 			instance.save()
 		formset.save_m2m()
+
 
 admin.site.register(models.Task, TaskAdmin)
 
